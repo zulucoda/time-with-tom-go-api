@@ -1,0 +1,57 @@
+[
+  {
+    "bookingId": 1,
+    "name": "Muzi",
+    "surname": "Buthelezi",
+    "email": "muzi@mfbproject.co.za",
+    "activity": "squash",
+    "date": "2020-08-02T19:54:04.966Z",
+    "startTime": "2020-04-21T07:00:00.000Z",
+    "endTime": "2020-04-21T11:00:00.000Z",
+    "paid": true
+  },
+  {
+    "bookingId": 2,
+    "name": "Muzi",
+    "surname": "Buthelezi",
+    "email": "muzi@mfbproject.co.za",
+    "activity": "squash",
+    "date": "2020-08-03T19:54:04.966Z",
+    "startTime": "2020-04-21T07:00:00.000Z",
+    "endTime": "2020-04-21T11:00:00.000Z",
+    "paid": true
+  },
+  {
+    "bookingId": 3,
+    "name": "Muzi",
+    "surname": "Buthelezi",
+    "email": "muzi@mfbproject.co.za",
+    "activity": "squash",
+    "date": "2020-08-04T19:54:04.966Z",
+    "startTime": "2020-04-21T07:00:00.000Z",
+    "endTime": "2020-04-21T11:00:00.000Z",
+    "paid": true
+  },
+  {
+    "bookingId": 4,
+    "name": "Muzi",
+    "surname": "Buthelezi",
+    "email": "muzi@mfbproject.co.za",
+    "activity": "squash",
+    "date": "2020-08-05T19:54:04.966Z",
+    "startTime": "2020-04-21T07:00:00.000Z",
+    "endTime": "2020-04-21T11:00:00.000Z",
+    "paid": true
+  },
+  {
+    "bookingId": 5,
+    "name": "Muzi",
+    "surname": "Buthelezi",
+    "email": "muzi@mfbproject.co.za",
+    "activity": "squash",
+    "date": "2020-08-06T19:54:04.966Z",
+    "startTime": "2020-04-21T07:00:00.000Z",
+    "endTime": "2020-04-21T11:00:00.000Z",
+    "paid": true
+  }
+]
