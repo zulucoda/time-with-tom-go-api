@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -20,15 +21,49 @@ var productList []Product
 
 func init() {
 	productJSON := `[
-		{"ProductID":1,"Manufacturer":"Alfa Romeo","Sku":"4567qHJK","Upc":"234567893456","PricePerUnit":"99.99","QuantityOnHand":800,"ProductName":"QUADRIFOGLIO badge"},
-		{"ProductID":2,"Manufacturer":"Alfa Romeo","Sku":"44444AF","Upc":"3132123123321","PricePerUnit":"200.50","QuantityOnHand":400,"ProductName":"QUADRIFOGLIO Keys"},
-		{"ProductID":3,"Manufacturer":"Alfa Romeo","Sku":"33333AF","Upc":"8798798546546","PricePerUnit":"40.44","QuantityOnHand":400,"ProductName":"QUADRIFOGLIO Cups"}
+  {
+    "ProductID": 1,
+    "Manufacturer": "Alfa Romeo",
+    "Sku": "4567qHJK",
+    "Upc": "234567893456",
+    "PricePerUnit": "99.99",
+    "QuantityOnHand": 800,
+    "ProductName": "QUADRIFOGLIO badge"
+  },
+  {
+    "ProductID": 2,
+    "Manufacturer": "Alfa Romeo",
+    "Sku": "44444AF",
+    "Upc": "3132123123321",
+    "PricePerUnit": "200.50",
+    "QuantityOnHand": 400,
+    "ProductName": "QUADRIFOGLIO Keys"
+  },
+  {
+    "ProductID": 3,
+    "Manufacturer": "Alfa Romeo",
+    "Sku": "33333AF",
+    "Upc": "8798798546546",
+    "PricePerUnit": "40.44",
+    "QuantityOnHand": 400,
+    "ProductName": "QUADRIFOGLIO Cups"
+  }
 ]`
 
 	err := json.Unmarshal([]byte(productJSON), &productList)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getNextId() int {
+	highestID := -1
+	for _, product := range productList {
+		if highestID < product.ProductID {
+			highestID = product.ProductID
+		}
+	}
+	return highestID + 1
 }
 
 func productsHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +76,27 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(productsJson)
+
+	case http.MethodPost:
+		var newProduct Product
+		bodyBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		err = json.Unmarshal(bodyBytes, &newProduct)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		if newProduct.ProductID != 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		newProduct.ProductID = getNextId()
+		productList = append(productList, newProduct)
+		w.WriteHeader(http.StatusCreated)
+		return
 	}
 }
 
