@@ -67,7 +67,7 @@ func getBookingList() []Booking {
 	for _, value := range bookingMap.m {
 		bookings = append(bookings, value)
 	}
-	bookingMap.Unlock()
+	bookingMap.RUnlock()
 	return bookings
 }
 
