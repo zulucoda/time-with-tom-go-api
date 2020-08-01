@@ -2,13 +2,27 @@ package booking
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
 )
+
+const bookingBasePath = "bookings"
+
+func SetupRoutes(apiBasePath string) {
+	bookingListHandler := http.HandlerFunc(bookingsHandler)
+	bookingItemHandler := http.HandlerFunc(bookingHandler)
+
+	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, bookingBasePath), bookingListHandler)
+	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, bookingBasePath), bookingItemHandler)
+}
 
 func bookingsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
+		bookingList := getBookingList()
 		bookingsJson, err := json.Marshal(bookingList)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -34,8 +48,12 @@ func bookingsHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		newBooking.BookingID = getNextId()
-		bookingList = append(bookingList, newBooking)
+		_, err = addOrUpdateBooking(newBooking)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
 		w.WriteHeader(http.StatusCreated)
 		return
 	}
@@ -49,7 +67,7 @@ func bookingHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	booking, listItemIndex := findBookingByID(bookingID)
+	booking := getBooking(bookingID)
 	if booking == nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -82,8 +100,7 @@ func bookingHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		booking = &updateBooking
-		bookingList[listItemIndex] = *booking
+		addOrUpdateBooking(updateBooking)
 		w.WriteHeader(http.StatusOK)
 		return
 
