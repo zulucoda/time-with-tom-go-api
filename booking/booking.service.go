@@ -3,7 +3,7 @@ package booking
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/zulucoda/creating-web-services-with-go/middleware"
+	"github.com/zulucoda/time-with-tom-go-api/middleware"
 	"io/ioutil"
 	"net/http"
 	"strconv"

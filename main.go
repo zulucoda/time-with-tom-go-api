@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/zulucoda/creating-web-services-with-go/booking"
+	"github.com/zulucoda/time-with-tom-go-api/booking"
 	"net/http"
 )
 

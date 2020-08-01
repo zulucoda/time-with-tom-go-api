@@ -1,3 +1,3 @@
-module github.com/zulucoda/creating-web-services-with-go
+module github.com/zulucoda/time-with-tom-go-api
 
 go 1.13
