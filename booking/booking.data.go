@@ -23,7 +23,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Fprintf("%d bookings loaded...\n", len(bookingMap.m))
+	fmt.Printf("%d bookings loaded...\n", len(bookingMap.m))
 }
 
 func loadBookingMap() (map[int]Booking, error) {
@@ -33,7 +33,7 @@ func loadBookingMap() (map[int]Booking, error) {
 		return nil, fmt.Errorf("file [%s] does not exist")
 	}
 
-	file, _ := ioutil.ReadAll(fileName)
+	file, _ := ioutil.ReadFile(fileName)
 	bookingList := make([]Booking, 0)
 	err = json.Unmarshal([]byte(file), &bookingList)
 	if err != nil {
