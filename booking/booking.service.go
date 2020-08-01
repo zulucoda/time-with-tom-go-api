@@ -57,6 +57,9 @@ func bookingsHandler(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(http.StatusCreated)
 		return
+	case http.MethodOptions:
+		// Pre-flight request sent by browsers for CORS
+		return
 	}
 }
 
@@ -103,6 +106,14 @@ func bookingHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		addOrUpdateBooking(updateBooking)
 		w.WriteHeader(http.StatusOK)
+		return
+
+	case http.MethodDelete:
+		removeBooking(bookingID)
+		return
+
+	case http.MethodOptions:
+		// Pre-flight request sent by browsers for CORS
 		return
 
 	default:
