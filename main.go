@@ -2,13 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
+	"github.com/zulucoda/creating-web-services-with-go/booking"
 	"log"
 	"net/http"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type Product struct {
@@ -79,22 +75,11 @@ func findProductByID(productID int) (*Product, int) {
 	return nil, 0
 }
 
-func middlewareHandler(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("before handler; middleware start")
-		start := time.Now()
-		handler.ServeHTTP(w, r)
-		fmt.Printf("middleware finished; %s", time.Since(start))
-	})
-}
+const apiBasePath = "/api"
 
 func main() {
 
-	productListHandler := http.HandlerFunc(productsHandler)
-	productItemHandler := http.HandlerFunc(productHandler)
-
-	http.Handle("/products", middlewareHandler(productListHandler))
-	http.Handle("/products/", middlewareHandler(productItemHandler))
+	booking.SetupRoutes(apiBasePath)
 	// port, ServeMux nil is the default
 	http.ListenAndServe(":5000", nil)
 }
