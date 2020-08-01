@@ -16,8 +16,8 @@ func SetupRoutes(apiBasePath string) {
 	bookingListHandler := http.HandlerFunc(bookingsHandler)
 	bookingItemHandler := http.HandlerFunc(bookingHandler)
 
-	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, bookingBasePath), middleware.LogStartAndEndTimeHandler(bookingListHandler))
-	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, bookingBasePath), middleware.LogStartAndEndTimeHandler(bookingItemHandler))
+	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, bookingBasePath), middleware.CORSHandler(middleware.LogStartAndEndTimeHandler(bookingListHandler)))
+	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, bookingBasePath), middleware.CORSHandler(middleware.LogStartAndEndTimeHandler(bookingItemHandler)))
 }
 
 func bookingsHandler(w http.ResponseWriter, r *http.Request) {
