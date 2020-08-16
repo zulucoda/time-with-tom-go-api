@@ -38,3 +38,10 @@ CREATE TABLE `booking` (
   CONSTRAINT `fk_booking_activity` FOREIGN KEY (`activityId`) REFERENCES `activity` (`activityId`),
   CONSTRAINT `fk_booking_users` FOREIGN KEY (`userId`) REFERENCES `users` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+
+SELECT b.bookingId, u.name, u.surname, u.email, a.title,
+b.bookingDate, b.startTime, b.endTime, b.paid
+FROM booking as b
+INNER JOIN activity as a on b.activityId = a.activityId
+INNER JOIN users as u on b.userId = u.userId
