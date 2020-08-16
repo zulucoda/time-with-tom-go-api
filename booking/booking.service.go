@@ -23,7 +23,11 @@ func SetupRoutes(apiBasePath string) {
 func bookingsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		bookingList := getBookingList()
+		bookingList, err := getBookingList()
+		if err != nil {
+		    w.WriteHeader(http.StatusInternalServerError)
+            return
+		}
 		bookingsJson, err := json.Marshal(bookingList)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

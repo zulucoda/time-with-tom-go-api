@@ -8,6 +8,7 @@ import (
 	"os"
 	"sort"
 	"sync"
+	"github.com/zulucoda/time-with-tom-go-api/database"
 )
 
 // Creating RW Mutex so that goroutines for write data at the same time
@@ -61,14 +62,33 @@ func removeBooking(bookingID int) {
 	delete(bookingMap.m, bookingID)
 }
 
-func getBookingList() []Booking {
-	bookingMap.RLock()
-	bookings := make([]Booking, 0, len(bookingMap.m))
-	for _, value := range bookingMap.m {
-		bookings = append(bookings, value)
-	}
-	bookingMap.RUnlock()
-	return bookings
+func getBookingList() ([]Booking, error) {
+    results, err := database.DbConn.Query(`
+    SELECT b.bookingId, u.name, u.surname, u.email, a.title,
+    b.bookingDate, b.startTime, b.endTime, b.paid
+    FROM booking as b
+    INNER JOIN activity as a on b.activityId = a.activityId
+    INNER JOIN users as u on b.userId = u.userId
+    `)
+    if err != nil {
+        return nil, err
+    }
+    defer results.Close()
+    bookings := make([]Booking, 0)
+    for results.Next() {
+        var booking Booking
+        results.Scan(&booking.BookingID,
+        &booking.Name,
+        &booking.Surname,
+        &booking.Email,
+        &booking.Activity,
+        &booking.Date,
+        &booking.StartTime,
+        &booking.EndTime,
+        &booking.Paid)
+        bookings = append(bookings, booking)
+    }
+    return bookings, nil
 }
 
 func getBookingIds() []int {
